@@ -13,6 +13,7 @@ const app = express();
 app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
+app.options("*", cors());
 dotenv.config();
 
 //listening to the port
