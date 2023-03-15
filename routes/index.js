@@ -16,11 +16,10 @@ router.post("/student", async (req, res) => {
     // const hashedPassword = await bcrypt.hash(req.body.password, salt);
     const newStudent = await Student.create(req.body);
     // const registeredStudent = newStudent.save();
+    const id = newStudent.phoneNo.slice(-8);
+    // console.log(newStudent.phoneNo.slice(-8));
     res.status(200).json({
-      message: `${
-        (`Registered Successfully`,
-        `Your candidate Id is``GG2023-${newStudent.phoneNo.slice(-8)}`)
-      }`,
+      message: `Registered Successfully`,
       data: newStudent,
     });
   } catch (error) {
@@ -36,11 +35,10 @@ router.post("/school", async (req, res) => {
   //   }
   try {
     // const hashedPassword = await bcrypt.hash(req.body.password, salt);
-    const newSchool = new School(req.body);
-    const registeredSchool = await newSchool.save();
+    const newSchool = await School.create(req.body);
     res.status(200).json({
       message: "Registered Successfully",
-      data: registeredSchool,
+      data: newSchool,
     });
   } catch (error) {
     res.status(500).json(error.message);
