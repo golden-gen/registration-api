@@ -19,9 +19,14 @@ const studentScheme = new mongoose.Schema({
   },
   phoneNo: {
     type: String,
-    difault: "",
+    unique: true,
+    required: true,
   },
   gender: {
+    type: String,
+    default: "",
+  },
+  school: {
     type: String,
     default: "",
   },

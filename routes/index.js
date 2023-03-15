@@ -17,7 +17,10 @@ router.post("/student", async (req, res) => {
     const newStudent = await Student.create(req.body);
     // const registeredStudent = newStudent.save();
     res.status(200).json({
-      message: "Registered Successfully",
+      message: `${
+        (`Registered Successfully`,
+        `Your candidate Id is``GG2023-${newStudent.phoneNo.slice(-8)}`)
+      }`,
       data: newStudent,
     });
   } catch (error) {
