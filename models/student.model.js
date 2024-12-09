@@ -31,4 +31,4 @@ const studentScheme = new mongoose.Schema({
     default: "",
   },
 });
-module.exports = mongoose.model("student", studentScheme);
+module.exports = mongoose.model("register", studentScheme);

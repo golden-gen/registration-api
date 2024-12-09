@@ -17,10 +17,12 @@ router.post("/student", async (req, res) => {
     const newStudent = await Student.create(req.body);
     // const registeredStudent = newStudent.save();
     const id = newStudent.phoneNo.slice(-8);
+    generatedId = Math.floor(Math.random() * 100000) + 1;
+    const registrationNo = `ST-${generatedId}-GG2024`;
     // console.log(newStudent.phoneNo.slice(-8));
     res.status(200).json({
       message: `Registered Successfully`,
-      data: newStudent,
+      data: { ...newStudent._doc, studentId: registrationNo },
     });
   } catch (error) {
     res.status(500).json(error.message);
@@ -41,6 +43,7 @@ router.post("/school", async (req, res) => {
       data: newSchool,
     });
   } catch (error) {
+    // throw new Error("Invalid email or password");
     res.status(500).json(error.message);
   }
 });

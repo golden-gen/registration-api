@@ -14,8 +14,13 @@ const errorHandler = (err, req, res, next) => {
   }
 
   // Mongoose duplicate key
+  console.log(err.code);
   if (err.code === 11000) {
-    const message = error.errors["phoneNo"].message;
+    const duplicateField = Object.keys(err.keyValue)[0];
+    const duplicateValue = err.keyValue[duplicateField];
+
+    // Construct a meaningful error message
+    const message = `This ${duplicateValue} is already exist`;
     error = new ErrorResponse(message, 400);
   }
 
