@@ -1,5 +1,6 @@
 const Student = require("../models/student.model");
 const School = require("../models/school.model");
+const Result = require("../models/result.model");
 const router = require("express").Router();
 const { body, validationResult } = require("express-validator");
 //create new student (Register user)
@@ -70,6 +71,30 @@ router.get("/schools", async (req, res) => {
       data: users,
     });
   } catch (err) {
+    res.status(500).json(error.message);
+  }
+});
+
+router.post("/result", async (req, res) => {
+  try {
+    const newResult = await Result.create(req.body);
+    res.status(200).json({
+      message: "Result submitted successfully",
+      data: newResult,
+    });
+  } catch (error) {
+    res.status(500).json(error.message);
+  }
+});
+
+router.get("/results", async (req, res) => {
+  try {
+    const results = await Result.find();
+    res.status(200).json({
+      message: "Results retrieved successfully",
+      data: results,
+    });
+  } catch (error) {
     res.status(500).json(error.message);
   }
 });
