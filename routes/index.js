@@ -19,7 +19,7 @@ router.post("/student", async (req, res) => {
     // const registeredStudent = newStudent.save();
     const id = newStudent.phoneNo.slice(-8);
     generatedId = Math.floor(Math.random() * 100000) + 1;
-    const registrationNo = `ST-${generatedId}-GG2024`;
+    const registrationNo = `GGQUIZ2025-${generatedId}`;
     // console.log(newStudent.phoneNo.slice(-8));
     res.status(200).json({
       message: `Registered Successfully`,
