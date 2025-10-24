@@ -30,5 +30,9 @@ const studentScheme = new mongoose.Schema({
     type: String,
     default: "",
   },
+  RegistrationId: {
+    type: String,
+    default: "",
+  },
 });
 module.exports = mongoose.model("register", studentScheme);

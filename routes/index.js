@@ -15,10 +15,24 @@ router.post("/student", async (req, res) => {
   try {
     // const salt = await bcrypt.genSalt(10);
     // const hashedPassword = await bcrypt.hash(req.body.password, salt);
-    const newStudent = await Student.create(req.body);
-    // const registeredStudent = newStudent.save();
-    const id = newStudent.phoneNo.slice(-8);
     generatedId = Math.floor(Math.random() * 100000) + 1;
+
+    const data = await Student.findOne({ phoneNo: req.body.phoneNo });
+    if (data) {
+      return res.status(400).json({
+        message: "Phone number already registered",
+      });
+    }
+
+    const payload = {
+      ...req.body,
+      RegistrationId: `GGQUIZ2025-${generatedId}`,
+    };
+
+    const newStudent = await Student.create(payload);
+    // const registeredStudent = newStudent.save();
+    // const id = newStudent.phoneNo.slice(-8);
+
     const registrationNo = `GGQUIZ2025-${generatedId}`;
     // console.log(newStudent.phoneNo.slice(-8));
     res.status(200).json({
