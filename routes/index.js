@@ -52,10 +52,10 @@ router.post("/school", async (req, res) => {
   //   }
   try {
     // const hashedPassword = await bcrypt.hash(req.body.password, salt);
-    const newSchool = await School.create(req.body);
+    // const newSchool = await School.create(req.body);
     res.status(200).json({
-      message: "Registered Successfully",
-      data: newSchool,
+      message: "Registration is closed",
+      data: null,
     });
   } catch (error) {
     // throw new Error("Invalid email or password");
