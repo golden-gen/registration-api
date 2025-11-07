@@ -76,6 +76,49 @@ router.get("/students", async (req, res) => {
   }
 });
 
+// Assign RegistrationId to students missing it
+router.post("/students/fix-registration", async (req, res) => {
+  try {
+    const students = await Student.find();
+
+    const withoutReg = students.filter(
+      (s) => !s.RegistrationId || String(s.RegistrationId).trim() === ""
+    );
+
+    const usedIds = new Set();
+    const prefix = "GGQUIZ2025-";
+    const generateId = () => Math.floor(Math.random() * 100000) + 1;
+
+    await Promise.all(
+      withoutReg.map(async (s) => {
+        let idNum = generateId();
+        // Ensure uniqueness within this operation run
+        while (usedIds.has(idNum)) {
+          idNum = generateId();
+        }
+        usedIds.add(idNum);
+        const regId = `${prefix}${idNum}`;
+        await Student.updateOne(
+          { _id: s._id },
+          { $set: { RegistrationId: regId } }
+        );
+      })
+    );
+
+    const updatedStudents = await Student.find();
+
+    res.status(200).json({
+      message: "Assigned registration IDs to students missing them",
+      data: {
+        updatedCount: withoutReg.length,
+        students: updatedStudents,
+      },
+    });
+  } catch (error) {
+    res.status(500).json(error.message);
+  }
+});
+
 router.get("/schools", async (req, res) => {
   try {
     const users = await School.find();
@@ -107,6 +150,38 @@ router.get("/results", async (req, res) => {
     res.status(200).json({
       message: "Results retrieved successfully",
       data: results,
+    });
+  } catch (error) {
+    res.status(500).json(error.message);
+  }
+});
+
+// Generate templated messages for all students
+router.get("/students/messages", async (req, res) => {
+  try {
+    const students = await Student.find();
+
+    const toFirstName = (student) => {
+      const source =
+        (student.othersName || "").trim() || (student.surname || "").trim();
+      if (!source) return "Student";
+      return source.split(/\s+/)[0];
+    };
+
+    const messages = students.map((s) => {
+      const firstName = toFirstName(s);
+      const registrationId = (s.RegistrationId || "").trim();
+      return (
+        `Dear ${firstName},\n\n` +
+        `Your CBT for the Golden Generation Quiz 2025 is scheduled for Saturday, November 8th, at 9:00 AM at Oranyan Grammar School 1, Sabo Oyo.\n\n` +
+        `Your Registration ID: ${registrationId}\n\n` +
+        `Note: It's important you come with your registration ID and ensure you are punctual to the center. Thank you.`
+      );
+    });
+
+    res.status(200).json({
+      message: "Messages generated successfully",
+      data: messages,
     });
   } catch (error) {
     res.status(500).json(error.message);
